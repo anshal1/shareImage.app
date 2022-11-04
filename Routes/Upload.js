@@ -20,6 +20,11 @@ class Error {
     }
 }
 router.post("/upload/image", upload.single("image"), FetchUser, async (req, res) => {
+    if(!req.file){
+        return res.status(404).json({
+            error:"Image not found"
+        })
+    }
     cloudinary.v2.uploader.upload("uploads/" + req.file.filename, { public_id: req.file.filename }).then((result) => {
         if (result) {
             ImageUpload.create({
@@ -59,8 +64,8 @@ router.post("/all/image/", async (req, res) => {
         isNextPage = true;
     }
     res.json({
-        post: allImage,
         isNextPage,
+        post: allImage,
     });
 }
 )
@@ -135,8 +140,8 @@ router.post("/like/images/", FetchUser, async (req, res) => {
     })
     if (!allImage || allImage.length < 1) {
         res.json({
-            post: allImage,
             isNextPage,
+            post: allImage,
         });
         return
     };
@@ -155,8 +160,8 @@ router.post("/like/images/", FetchUser, async (req, res) => {
         })
     }
     res.json({
-        post: allImage,
         isNextPage,
+        post: allImage,
         allImage,
         allimage
     });
@@ -203,8 +208,8 @@ router.post("/saved/images/", FetchUser, async (req, res) => {
     })
     if (!allImage || allImage.length < 1) {
         res.json({
-            post: allImage,
             isNextPage,
+            post: allImage,
         });
         return
     };
